@@ -9,10 +9,16 @@
 <body>
     <header>
         <h1>Roll Web App</h1>
-        <p>Generate random numbers and true/false values in style.</p>
     </header>
     <main>
-        <div class="card">
+        <nav class="tabs">
+            <button class="tab-button active" onclick="switchTab('numberGenerator')">Random Number</button>
+            <button class="tab-button" onclick="switchTab('trueFalseGenerator')">True/False</button>
+            <button class="tab-button" onclick="switchTab('randomOptionPicker')">Random Option</button>
+        </nav>
+
+        <!-- Random Number Generator -->
+        <section id="numberGenerator" class="tab-content active">
             <h2>Random Number Generator</h2>
             <div class="input-group">
                 <label for="minRange">Min:</label>
@@ -22,12 +28,26 @@
             </div>
             <button onclick="generateRandomNumber()">Generate Number</button>
             <p id="randomNumberResult" class="result"></p>
-        </div>
-        <div class="card">
+        </section>
+
+        <!-- True/False Generator -->
+        <section id="trueFalseGenerator" class="tab-content">
             <h2>True/False Generator</h2>
             <button onclick="generateTrueOrFalse()">Generate True/False</button>
             <p id="trueFalseResult" class="result"></p>
-        </div>
+        </section>
+
+        <!-- Random Option Picker -->
+        <section id="randomOptionPicker" class="tab-content">
+            <h2>Random Option Picker</h2>
+            <div class="option-list">
+                <input type="text" id="optionInput" placeholder="Enter an option">
+                <button onclick="addOption()">Add Option</button>
+            </div>
+            <ul id="options"></ul>
+            <button onclick="pickRandomOption()">Pick a Random Option</button>
+            <p id="randomOptionResult" class="result"></p>
+        </section>
     </main>
     <footer>
         <p>© 2024 Roll Web App. Designed with care.</p>
