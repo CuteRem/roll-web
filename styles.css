@@ -1,78 +1,51 @@
-/* Global styles */
+/* General styles */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-header {
-    background-color: var(--header-bg);
-    color: var(--header-text);
-    text-align: center;
-    padding: 20px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  background-color: var(--header-bg);
+  color: var(--header-text);
 }
 
-#theme-selector {
-    margin-top: 10px;
+.menu-aside {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
 }
 
-main {
-    padding: 20px;
+.section-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 80vh;
 }
 
-section {
-    margin-bottom: 20px;
+.result {
+  font-size: 2em;
+  color: var(--text-highlight);
+  animation: fadeIn 0.5s;
 }
 
-/* Variables for themes */
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333333;
-    --header-bg: #4CAF50;
-    --header-text: #ffffff;
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
-[data-theme="pink"] {
-    --bg-color: #ffe6f2;
-    --text-color: #800040;
-    --header-bg: #ff99cc;
+.icon-float-enter-active,
+.icon-float-leave-active {
+  transition: transform 0.5s;
 }
-
-[data-theme="red"] {
-    --bg-color: #ffe6e6;
-    --text-color: #990000;
-    --header-bg: #ff4d4d;
-}
-
-[data-theme="yellow"] {
-    --bg-color: #fff9e6;
-    --text-color: #665500;
-    --header-bg: #ffd11a;
-}
-
-[data-theme="black"] {
-    --bg-color: #1a1a1a;
-    --text-color: #f4f4f9;
-    --header-bg: #333333;
-}
-
-[data-theme="blue"] {
-    --bg-color: #e6f2ff;
-    --text-color: #003366;
-    --header-bg: #3399ff;
-}
-
-[data-theme="green"] {
-    --bg-color: #e6ffe6;
-    --text-color: #004d00;
-    --header-bg: #33cc33;
-}
-
-[data-theme="purple"] {
-    --bg-color: #f3e6ff;
-    --text-color: #330066;
-    --header-bg: #9933ff;
+.icon-float-enter, .icon-float-leave-to {
+  transform: translateY(-20px);
 }
