@@ -1,49 +1,45 @@
-// Change theme
-function changeTheme() {
-    const theme = document.getElementById("theme").value;
-    document.body.setAttribute("data-theme", theme);
-}
-
-// Generate a random number
-function generateNumber() {
-    const min = parseInt(document.getElementById("min").value) || 0;
-    const max = parseInt(document.getElementById("max").value) || 100;
-    const result = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById("number-result").innerText = `Result: ${result}`;
-}
-
-// Generate True/False
-function generateTrueFalse() {
-    const result = Math.random() < 0.5 ? "True" : "False";
-    document.getElementById("true-false-result").innerText = `Result: ${result}`;
-}
-
-// Add options
-const options = [];
-function addOption() {
-    const optionInput = document.getElementById("option-input").value.trim();
-    if (optionInput) {
-        options.push(optionInput);
-        updateOptions();
-        document.getElementById("option-input").value = "";
-    }
-}
-
-function clearOptions() {
-    options.length = 0;
-    updateOptions();
-}
-
-function selectRandomOption() {
-    if (options.length > 0) {
-        const randomIndex = Math.floor(Math.random() * options.length);
-        document.getElementById("option-result").innerText = `Result: ${options[randomIndex]}`;
-    } else {
-        document.getElementById("option-result").innerText = "No options available!";
-    }
-}
-
-function updateOptions() {
-    const container = document.getElementById("options-container");
-    container.innerHTML = options.map((option, index) => `<p>${index + 1}. ${option}</p>`).join("");
-}
+const app = Vue.createApp({
+  data() {
+    return {
+      currentTheme: 'default',
+      currentSection: '1',
+      numberRange: { min: 0, max: 100 },
+      numberResult: null,
+      trueFalseResult: null,
+      optionInput: '',
+      options: [],
+      optionResult: null,
+    };
+  },
+  methods: {
+    changeTheme(theme) {
+      this.currentTheme = theme;
+      document.body.setAttribute('data-theme', theme);
+    },
+    changeSection(section) {
+      this.currentSection = section;
+    },
+    generateNumber() {
+      const { min, max } = this.numberRange;
+      this.numberResult = Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    generateTrueFalse() {
+      this.trueFalseResult = Math.random() < 0.5;
+    },
+    addOption() {
+      if (this.optionInput.trim()) {
+        this.options.push(this.optionInput.trim());
+        this.optionInput = '';
+      }
+    },
+    clearOptions() {
+      this.options = [];
+    },
+    selectRandomOption() {
+      if (this.options.length) {
+        const randomIndex = Math.floor(Math.random() * this.options.length);
+        this.optionResult = this.options[randomIndex];
+      }
+    },
+  },
+}).mount('#app');
