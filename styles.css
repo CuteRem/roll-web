@@ -1,21 +1,24 @@
-/* General styles */
+/* 样式优化 */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 10px 20px;
   background-color: var(--header-bg);
   color: var(--header-text);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .menu-aside {
   background-color: var(--sidebar-bg);
-  color: var(--sidebar-text);
+  height: 100vh;
 }
 
 .section-content {
@@ -23,29 +26,20 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
   height: 80vh;
+  text-align: center;
 }
 
 .result {
-  font-size: 2em;
-  color: var(--text-highlight);
+  font-size: 2rem;
   animation: fadeIn 0.5s;
 }
 
-/* Transitions */
+/* 动画效果 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
-}
-
-.icon-float-enter-active,
-.icon-float-leave-active {
-  transition: transform 0.5s;
-}
-.icon-float-enter, .icon-float-leave-to {
-  transform: translateY(-20px);
 }
