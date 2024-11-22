@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roll Web App</title>
+  <title>Optimized Roll Web App</title>
   <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,9 +14,9 @@
       <div class="header-left">Roll Web App</div>
       <div class="header-right">
         <el-dropdown @command="changeTheme">
-          <span class="el-dropdown-link">
-            Theme: {{ currentTheme }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
+          <el-button type="text">
+            Theme: {{ currentTheme }} <i class="el-icon-arrow-down"></i>
+          </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="default">White</el-dropdown-item>
             <el-dropdown-item command="pink">Pink</el-dropdown-item>
@@ -25,40 +25,30 @@
             <el-dropdown-item command="black">Black</el-dropdown-item>
             <el-dropdown-item command="blue">Blue</el-dropdown-item>
             <el-dropdown-item command="green">Green</el-dropdown-item>
-            <el-dropdown-item command="purple">Purple</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-header>
 
-    <!-- Layout -->
+    <!-- Main Layout -->
     <el-container>
       <!-- Sidebar -->
       <el-aside width="200px" class="menu-aside">
         <el-menu
           default-active="1"
-          class="el-menu-vertical"
           @select="changeSection"
         >
-          <el-menu-item index="1">
-            <i class="el-icon-s-data"></i>
-            <span slot="title">Random Number</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-circle-check"></i>
-            <span slot="title">True/False</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-menu"></i>
-            <span slot="title">Option Selector</span>
-          </el-menu-item>
+          <el-menu-item index="1"><i class="el-icon-s-data"></i>Random Number</el-menu-item>
+          <el-menu-item index="2"><i class="el-icon-circle-check"></i>True/False</el-menu-item>
+          <el-menu-item index="3"><i class="el-icon-menu"></i>Option Selector</el-menu-item>
         </el-menu>
       </el-aside>
 
       <!-- Main Content -->
       <el-main>
+        <!-- Random Number Generator -->
         <div v-if="currentSection === '1'" class="section-content">
-          <h2>Number Generator</h2>
+          <h2>Random Number Generator</h2>
           <el-input v-model="numberRange.min" placeholder="Min"></el-input>
           <el-input v-model="numberRange.max" placeholder="Max"></el-input>
           <el-button type="primary" @click="generateNumber">Generate</el-button>
@@ -67,6 +57,7 @@
           </transition>
         </div>
 
+        <!-- True/False Generator -->
         <div v-if="currentSection === '2'" class="section-content">
           <h2>True/False Generator</h2>
           <el-button type="success" @click="generateTrueFalse">Generate</el-button>
@@ -79,6 +70,7 @@
           </transition>
         </div>
 
+        <!-- Option Selector -->
         <div v-if="currentSection === '3'" class="section-content">
           <h2>Option Selector</h2>
           <el-input
