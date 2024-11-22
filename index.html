@@ -1,60 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roll Web App</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roll Web App</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Roll Web App</h1>
-        <div id="theme-selector">
-            <label for="theme">Choose Theme:</label>
-            <select id="theme" onchange="changeTheme()">
-                <option value="default">White</option>
-                <option value="pink">Pink</option>
-                <option value="red">Red</option>
-                <option value="yellow">Yellow</option>
-                <option value="black">Black</option>
-                <option value="blue">Blue</option>
-                <option value="green">Green</option>
-                <option value="purple">Purple</option>
-            </select>
+  <div id="app">
+    <!-- Header -->
+    <el-header class="header">
+      <div class="header-left">Roll Web App</div>
+      <div class="header-right">
+        <el-dropdown @command="changeTheme">
+          <span class="el-dropdown-link">
+            Theme: {{ currentTheme }}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="default">White</el-dropdown-item>
+            <el-dropdown-item command="pink">Pink</el-dropdown-item>
+            <el-dropdown-item command="red">Red</el-dropdown-item>
+            <el-dropdown-item command="yellow">Yellow</el-dropdown-item>
+            <el-dropdown-item command="black">Black</el-dropdown-item>
+            <el-dropdown-item command="blue">Blue</el-dropdown-item>
+            <el-dropdown-item command="green">Green</el-dropdown-item>
+            <el-dropdown-item command="purple">Purple</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-header>
+
+    <!-- Layout -->
+    <el-container>
+      <!-- Sidebar -->
+      <el-aside width="200px" class="menu-aside">
+        <el-menu
+          default-active="1"
+          class="el-menu-vertical"
+          @select="changeSection"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-s-data"></i>
+            <span slot="title">Random Number</span>
+          </el-menu-item>
+          <el-menu-item index="2">
+            <i class="el-icon-circle-check"></i>
+            <span slot="title">True/False</span>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <i class="el-icon-menu"></i>
+            <span slot="title">Option Selector</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+
+      <!-- Main Content -->
+      <el-main>
+        <div v-if="currentSection === '1'" class="section-content">
+          <h2>Number Generator</h2>
+          <el-input v-model="numberRange.min" placeholder="Min"></el-input>
+          <el-input v-model="numberRange.max" placeholder="Max"></el-input>
+          <el-button type="primary" @click="generateNumber">Generate</el-button>
+          <transition name="fade">
+            <h3 v-if="numberResult" class="result">{{ numberResult }}</h3>
+          </transition>
         </div>
-    </header>
-    <main>
-        <!-- Random number generator -->
-        <section id="random-number-section">
-            <h2>Number Generator</h2>
-            <label>Enter range:</label>
-            <input type="number" id="min" placeholder="Min" />
-            <input type="number" id="max" placeholder="Max" />
-            <button onclick="generateNumber()">Generate</button>
-            <p id="number-result">Result: </p>
-        </section>
 
-        <!-- True/False generator -->
-        <section id="true-false-section">
-            <h2>True or False Generator</h2>
-            <button onclick="generateTrueFalse()">Generate True/False</button>
-            <p id="true-false-result">Result: </p>
-        </section>
+        <div v-if="currentSection === '2'" class="section-content">
+          <h2>True/False Generator</h2>
+          <el-button type="success" @click="generateTrueFalse">Generate</el-button>
+          <transition name="icon-float">
+            <i
+              v-if="trueFalseResult !== null"
+              :class="trueFalseResult ? 'el-icon-circle-check' : 'el-icon-circle-close'"
+              class="true-false-icon"
+            ></i>
+          </transition>
+        </div>
 
-        <!-- Option selector -->
-        <section id="option-selector-section">
-            <h2>Option Selector</h2>
-            <div id="options-container"></div>
-            <input type="text" id="option-input" placeholder="Enter option" />
-            <button onclick="addOption()">Add Option</button>
-            <button onclick="clearOptions()">Clear Options</button>
-            <button onclick="selectRandomOption()">Select Random</button>
-            <p id="option-result">Result: </p>
-        </section>
-    </main>
-    <footer>
-        <p>© 2024 Roll Web App. Designed with care.</p>
-    </footer>
-    <script src="scripts.js"></script>
+        <div v-if="currentSection === '3'" class="section-content">
+          <h2>Option Selector</h2>
+          <el-input
+            v-model="optionInput"
+            placeholder="Enter option"
+            @keyup.enter="addOption"
+          ></el-input>
+          <el-button type="primary" @click="addOption">Add</el-button>
+          <el-button type="danger" @click="clearOptions">Clear</el-button>
+          <el-button type="warning" @click="selectRandomOption">Random</el-button>
+          <transition name="fade">
+            <h3 v-if="optionResult" class="result">{{ optionResult }}</h3>
+          </transition>
+          <ul>
+            <li v-for="(option, index) in options" :key="index">{{ option }}</li>
+          </ul>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://unpkg.com/element-plus"></script>
+  <script src="scripts.js"></script>
 </body>
 </html>
