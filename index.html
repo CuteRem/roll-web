@@ -2,98 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Optimized Roll Web App</title>
-  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Roll Web App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #app {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .theme-selector {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    <!-- Header -->
-    <el-header class="header">
-      <div class="header-left">Roll Web App</div>
-      <div class="header-right">
-        <el-dropdown @command="changeTheme">
-          <el-button type="text">
-            Theme: {{ currentTheme }} <i class="el-icon-arrow-down"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="default">White</el-dropdown-item>
-            <el-dropdown-item command="pink">Pink</el-dropdown-item>
-            <el-dropdown-item command="red">Red</el-dropdown-item>
-            <el-dropdown-item command="yellow">Yellow</el-dropdown-item>
-            <el-dropdown-item command="black">Black</el-dropdown-item>
-            <el-dropdown-item command="blue">Blue</el-dropdown-item>
-            <el-dropdown-item command="green">Green</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-header>
+    <h1>Roll Web App</h1>
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
+      <el-menu-item index="1" @click="switchTab('randomNumber')">Number Generator</el-menu-item>
+      <el-menu-item index="2" @click="switchTab('trueFalse')">True/False Generator</el-menu-item>
+      <el-menu-item index="3" @click="switchTab('randomOption')">Option Selector</el-menu-item>
+    </el-menu>
 
-    <!-- Main Layout -->
-    <el-container>
-      <!-- Sidebar -->
-      <el-aside width="200px" class="menu-aside">
-        <el-menu
-          default-active="1"
-          @select="changeSection"
-        >
-          <el-menu-item index="1"><i class="el-icon-s-data"></i>Random Number</el-menu-item>
-          <el-menu-item index="2"><i class="el-icon-circle-check"></i>True/False</el-menu-item>
-          <el-menu-item index="3"><i class="el-icon-menu"></i>Option Selector</el-menu-item>
-        </el-menu>
-      </el-aside>
+    <div v-if="currentTab === 'randomNumber'">
+      <h2>Number Generator</h2>
+      <el-input-number v-model="min" label="Minimum" :min="0"></el-input-number>
+      <el-input-number v-model="max" label="Maximum" :max="100"></el-input-number>
+      <el-button type="primary" @click="generateNumber">Generate</el-button>
+      <transition name="fade">
+        <div v-if="numberResult !== null" style="font-size: 24px; margin-top: 20px;">{{ numberResult }}</div>
+      </transition>
+    </div>
 
-      <!-- Main Content -->
-      <el-main>
-        <!-- Random Number Generator -->
-        <div v-if="currentSection === '1'" class="section-content">
-          <h2>Random Number Generator</h2>
-          <el-input v-model="numberRange.min" placeholder="Min"></el-input>
-          <el-input v-model="numberRange.max" placeholder="Max"></el-input>
-          <el-button type="primary" @click="generateNumber">Generate</el-button>
-          <transition name="fade">
-            <h3 v-if="numberResult" class="result">{{ numberResult }}</h3>
-          </transition>
+    <div v-if="currentTab === 'trueFalse'">
+      <h2>True/False Generator</h2>
+      <el-button type="primary" @click="generateTrueFalse">Generate</el-button>
+      <transition name="fade">
+        <div v-if="tfResult !== null" style="margin-top: 20px;">
+          <el-icon v-if="tfResult"><el-icon-success></el-icon></el-icon>
+          <el-icon v-else><el-icon-close></el-icon></el-icon>
         </div>
+      </transition>
+    </div>
 
-        <!-- True/False Generator -->
-        <div v-if="currentSection === '2'" class="section-content">
-          <h2>True/False Generator</h2>
-          <el-button type="success" @click="generateTrueFalse">Generate</el-button>
-          <transition name="icon-float">
-            <i
-              v-if="trueFalseResult !== null"
-              :class="trueFalseResult ? 'el-icon-circle-check' : 'el-icon-circle-close'"
-              class="true-false-icon"
-            ></i>
-          </transition>
-        </div>
-
-        <!-- Option Selector -->
-        <div v-if="currentSection === '3'" class="section-content">
-          <h2>Option Selector</h2>
-          <el-input
-            v-model="optionInput"
-            placeholder="Enter option"
-            @keyup.enter="addOption"
-          ></el-input>
-          <el-button type="primary" @click="addOption">Add</el-button>
-          <el-button type="danger" @click="clearOptions">Clear</el-button>
-          <el-button type="warning" @click="selectRandomOption">Random</el-button>
-          <transition name="fade">
-            <h3 v-if="optionResult" class="result">{{ optionResult }}</h3>
-          </transition>
-          <ul>
-            <li v-for="(option, index) in options" :key="index">{{ option }}</li>
-          </ul>
-        </div>
-      </el-main>
-    </el-container>
+    <div v-if="currentTab === 'randomOption'">
+      <h2>Option Selector</h2>
+      <el-input v-model="newOption" placeholder="Enter an option"></el-input>
+      <el-button @click="addOption" type="success">Add</el-button>
+      <el-button @click="clearOptions" type="danger">Clear</el-button>
+      <ul>
+        <li v-for="(option, index) in options" :key="index">{{ option }}</li>
+      </ul>
+      <el-button type="primary" @click="generateOption">Generate</el-button>
+      <transition name="fade">
+        <div v-if="optionResult !== null" style="margin-top: 20px;">{{ optionResult }}</div>
+      </transition>
+    </div>
   </div>
 
-  <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://unpkg.com/element-plus"></script>
-  <script src="scripts.js"></script>
+  <div class="theme-selector">
+    <el-dropdown>
+      <el-button type="primary" icon="el-icon-arrow-down">Theme</el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-for="theme in themes" :key="theme.name" @click.native="changeTheme(theme.color)">
+          {{ theme.name }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          currentTab: 'randomNumber',
+          min: 0,
+          max: 10,
+          numberResult: null,
+          tfResult: null,
+          options: [],
+          newOption: '',
+          optionResult: null,
+          themes: [
+            { name: 'Default', color: '#FFFFFF' },
+            { name: 'Pink', color: '#FFC0CB' },
+            { name: 'Red', color: '#FF0000' },
+            { name: 'Yellow', color: '#FFFF00' },
+            { name: 'Black', color: '#000000' },
+            { name: 'Blue', color: '#0000FF' },
+            { name: 'Green', color: '#008000' },
+            { name: 'Purple', color: '#800080' },
+          ],
+        };
+      },
+      methods: {
+        switchTab(tab) {
+          this.currentTab = tab;
+        },
+        generateNumber() {
+          this.numberResult = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
+        },
+        generateTrueFalse() {
+          this.tfResult = Math.random() > 0.5;
+        },
+        addOption() {
+          if (this.newOption.trim()) {
+            this.options.push(this.newOption.trim());
+            this.newOption = '';
+          }
+        },
+        clearOptions() {
+          this.options = [];
+        },
+        generateOption() {
+          if (this.options.length) {
+            const randomIndex = Math.floor(Math.random() * this.options.length);
+            this.optionResult = this.options[randomIndex];
+          }
+        },
+        changeTheme(color) {
+          document.body.style.backgroundColor = color;
+        },
+      },
+    });
+
+    app.use(ElementPlus);
+    app.mount('#app');
+  </script>
 </body>
 </html>
