@@ -1,6 +1,14 @@
 function generateRandomNumber() {
-    const randomNumber = Math.floor(Math.random() * 100) + 1;
-    document.getElementById("randomNumber").innerText = `Random Number: ${randomNumber}`;
+    const min = parseInt(document.getElementById("minRange").value);
+    const max = parseInt(document.getElementById("maxRange").value);
+
+    if (isNaN(min) || isNaN(max) || min >= max) {
+        document.getElementById("randomNumberResult").innerText = "Please enter a valid range (Min < Max).";
+        return;
+    }
+
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    document.getElementById("randomNumberResult").innerText = `Random Number: ${randomNumber}`;
 }
 
 function generateTrueOrFalse() {
