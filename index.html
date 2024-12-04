@@ -5,113 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Roll Web App</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css">
-  <link rel="stylesheet" href="styles.css">
   <style>
-    :root {
-      --background: #FFFFFF;
-      --text-color: #000000;
-      --header-bg: #f0f0f0;
-      --header-text: #333;
-      --sidebar-bg: #fff; /* Added sidebar background color */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease; /* 添加过渡效果 */
     }
-
     #app {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh; /* Ensure app takes full viewport height */
+      max-width: 600px;
+      margin: 20px auto; /* 添加上下边距 */
+      padding: 20px;
+      text-align: center;
     }
-
-    .el-menu.el-menu--horizontal {
-      border-bottom: none; /* Remove menu border */
+    .header {
+      background-color: #f0f0f0; /* 添加背景色 */
+      padding: 10px 0;
+      margin-bottom: 20px; /* 与下方内容分界 */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 添加阴影 */
     }
-
-    .section-content {
-      flex-grow: 1; /* Allow content to take up remaining space */
+    .theme-selector {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 10; /* 确保在最上层 */
     }
-
-    .result-display { /* Style for the displayed result */
-      font-size: 3rem;
+    .result {
+      font-size: 2rem;
       margin-top: 20px;
+      animation: fadeIn 0.5s;
     }
-
-    /* True/False Icons */
-    .tf-icon {
-      font-size: 4rem;
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.5s;
     }
-    .tf-icon .el-icon-success {
-      color: green;
+    .fade-enter, .fade-leave-to {
+      opacity: 0;
     }
-    .tf-icon .el-icon-close {
-      color: red;
+    /* 选项生成结果样式优化 */
+    .option-result {
+      font-size: 2.5rem;
+      margin: 20px 0;
+      font-weight: bold;
     }
-
   </style>
 </head>
 <body>
   <div id="app">
     <div class="header">
       <h1>Roll Web App</h1>
-      <div class="theme-selector">
-        <el-dropdown>
-          <el-button type="primary" icon="el-icon-arrow-down">Theme</el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="theme in themes" :key="theme.name" @click="changeTheme(theme)">
-              {{ theme.name }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
     </div>
-
-    <el-menu :default-active="currentTab" class="el-menu-demo" mode="horizontal" @select="switchTab">
-      <el-menu-item index="randomNumber">Number</el-menu-item>
-      <el-menu-item index="trueFalse">True/False</el-menu-item>
-      <el-menu-item index="randomOption">Option</el-menu-item>
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
+      <el-menu-item index="1" @click="switchTab('randomNumber')">数字</el-menu-item>
+      <el-menu-item index="2" @click="switchTab('trueFalse')">真/假</el-menu-item>
+      <el-menu-item index="3" @click="switchTab('randomOption')">选项</el-menu-item>
     </el-menu>
 
-
-
-    <div class="section-content">
-      <div v-if="currentTab === 'randomNumber'">
-        <h2>Number</h2>
-        <el-input-number v-model="min" :min="0"></el-input-number>
-        <el-input-number v-model="max" :max="100"></el-input-number>
-        <el-button type="primary" @click="generateNumber">Generate</el-button>
-        <transition name="fade">
-          <div v-if="numberResult !== null" class="result-display">{{ numberResult }}</div>
-        </transition>
-      </div>
-
-      <div v-if="currentTab === 'trueFalse'">
-        <h2>True/False</h2>
-        <el-button type="primary" @click="generateTrueFalse">Generate</el-button>
-        <transition name="fade">
-          <div v-if="tfResult !== null" class="tf-icon">
-            <el-icon v-if="tfResult"><el-icon-success></el-icon>
-            <el-icon v-else><el-icon-close></el-icon>
-          </div>
-        </transition>
-      </div>
-
-      <div v-if="currentTab === 'randomOption'">
-        <h2>Option</h2>
-         <transition name="fade">
-          <div v-if="optionResult !== null" class="result-display">{{ optionResult }}</div>
-        </transition>
-        <el-input v-model="newOption" placeholder="Enter an option"></el-input>
-        <el-button @click="addOption" type="success">Add</el-button>
-        <el-button @click="clearOptions" type="danger">Clear</el-button>
-        <ul>
-          <li v-for="(option, index) in options" :key="index">{{ option }}</li>
-        </ul>
-        <el-button type="primary" @click="generateOption">Generate</el-button>
-
-      </div>
+    <div v-if="currentTab === 'randomNumber'">
+      <h2>数字</h2>
+      <el-input-number v-model="min" label="最小值" :min="0"></el-input-number>
+      <el-input-number v-model="max" label="最大值" :max="100"></el-input-number>
+      <el-button type="primary" @click="generateNumber">生成</el-button>
+      <transition name="fade">
+        <div v-if="numberResult !== null" class="result">{{ numberResult }}</div>
+      </transition>
     </div>
 
+    <div v-if="currentTab === 'trueFalse'">
+      <h2>真/假</h2>
+      <el-button type="primary" @click="generateTrueFalse">生成</el-button>
+      <transition name="fade">
+        <div v-if="tfResult !== null" style="margin-top: 20px;">
+          <el-icon v-if="tfResult" size="large" color="#67C23A"><el-icon-success /></el-icon>
+          <el-icon v-else size="large" color="#F56C6C"><el-icon-close /></el-icon>
+        </div>
+      </transition>
+    </div>
 
+    <div v-if="currentTab === 'randomOption'">
+      <h2>选项</h2>
+      <transition name="fade">
+        <div v-if="optionResult !== null" class="option-result">{{ optionResult }}</div>
+      </transition>
+      <el-input v-model="newOption" placeholder="输入一个选项"></el-input>
+      <el-button @click="addOption" type="success">添加</el-button>
+      <el-button @click="clearOptions" type="danger">清除</el-button>
+      <ul style="list-style: none; padding: 0; margin-top: 20px;">
+        <li v-for="(option, index) in options" :key="index" style="margin-bottom: 5px;">{{ option }}</li>
+      </ul>
+      <el-button type="primary" @click="generateOption" style="margin-top: 20px;">选择</el-button>
+    </div>
+  </div>
 
-  </script>
+  <div class="theme-selector">
+    <el-dropdown>
+      <el-button type="primary" icon="el-icon-arrow-down">主题</el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-for="theme in themes" :key="theme.name" @click="changeTheme(theme.color)">
+          {{ theme.name }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
   <script>
@@ -127,16 +123,23 @@
           newOption: '',
           optionResult: null,
           themes: [
-            { name: 'Default', color: { '--background': '#FFFFFF', '--text-color': '#000000', '--header-bg': '#f0f0f0', '--header-text': '#333' } },
-            { name: 'Pink', color: { '--background': '#FFC0CB', '--text-color': '#000000', '--header-bg': '#FF69B4', '--header-text': '#fff' } },
-            // ... more themes
+            { name: '默认', color: '#FFFFFF' },
+            { name: '粉色', color: '#FFC0CB' },
+            { name: '红色', color: '#FF0000' },
+            { name: '黄色', color: '#FFFF00' },
+            { name: '黑色', color: '#000000' },
+            { name: '蓝色', color: '#0000FF' },
+            { name: '绿色', color: '#008000' },
+            { name: '紫色', color: '#800080' },
           ],
         };
       },
       methods: {
         switchTab(tab) {
           this.currentTab = tab;
-          this.clearResults(); // Clear previous results
+          this.numberResult = null;
+          this.tfResult = null;
+          this.optionResult = null;
         },
         generateNumber() {
           this.numberResult = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
@@ -159,23 +162,14 @@
             this.optionResult = this.options[randomIndex];
           }
         },
-        changeTheme(theme) {
-          for (const [key, value] of Object.entries(theme.color)) {
-            document.documentElement.style.setProperty(key, value);
-          }
+        changeTheme(color) {
+          document.body.style.backgroundColor = color;
         },
-        clearResults() { // Helper function to clear result displays
-          this.numberResult = null;
-          this.tfResult = null;
-          this.optionResult = null;
-        },
-
       },
     });
 
     app.use(ElementPlus);
     app.mount('#app');
-
   </script>
 </body>
 </html>
