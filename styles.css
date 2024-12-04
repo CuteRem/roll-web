@@ -43,3 +43,11 @@ body {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+.tf-icon .el-icon-success {
+  color: green; /* Add color to success icon */
+}
+
+.tf-icon .el-icon-close {
+  color: red; /* Add color to close icon */
+}
