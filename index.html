@@ -58,7 +58,41 @@
     .selected-option {
       font-size: 30px;
     }
-    /* 响应式调整 */
+    /* Options list styling */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    li {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      width: 80%;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    /* Input and button spacing */
+    .input-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+
+    /* Theme selector button styling */
+    .el-dropdown .el-button {
+      font-size: 14px;
+      padding: 8px 20px;
+    }
+    
+    /* Responsive adjustments */
     @media (max-width: 600px) {
       #app {
         padding: 10px;
@@ -83,7 +117,7 @@
     </div>
 
     <!-- Menu -->
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchTab">
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchTab" :style="{justifyContent: 'center'}">
       <el-menu-item index="1">Number</el-menu-item>
       <el-menu-item index="2">True/False</el-menu-item>
       <el-menu-item index="3">Option</el-menu-item>
@@ -114,11 +148,13 @@
 
     <!-- Number Generator Section -->
     <div v-if="currentTab === 'randomNumber'" class="section-content">
-      <div style="display: flex; gap: 10px;">
+      <div class="input-container">
         <el-input-number v-model="min" label="Minimum" :min="0" style="width: 100px;"></el-input-number>
         <el-input-number v-model="max" label="Maximum" :max="100" style="width: 100px;"></el-input-number>
       </div>
-      <el-button type="primary" @click="generateNumber">Generate</el-button>
+      <div class="button-container">
+        <el-button type="primary" @click="generateNumber">Generate</el-button>
+      </div>
     </div>
 
     <!-- True/False Generator Section -->
@@ -128,11 +164,11 @@
 
     <!-- Option Selector Section -->
     <div v-if="currentTab === 'randomOption'" class="section-content">
-      <div style="display: flex; gap: 10px;">
+      <div class="input-container">
         <el-input v-model="newOption" placeholder="Enter an option" style="flex: 1;"></el-input>
         <el-button @click="addOption" type="success">Add</el-button>
       </div>
-      <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <div class="button-container">
         <el-button @click="clearOptions" type="danger">Clear</el-button>
         <el-button type="primary" @click="generateOption">Generate</el-button>
       </div>
@@ -202,15 +238,16 @@
           this.options = [];
         },
         generateOption() {
-          if (this.options.length) {
+          if (this.options.length > 0) {
             const randomIndex = Math.floor(Math.random() * this.options.length);
             this.optionResult = this.options[randomIndex];
           }
         },
         changeTheme(color) {
-          document.body.style.backgroundColor = color;
           document.documentElement.style.setProperty('--background-color', color);
           document.documentElement.style.setProperty('--header-bg', color === '#000000' ? '#333' : '#f4f4f4');
+          document.documentElement.style.setProperty('--text-color', color === '#000000' ? '#fff' : '#000');
+          document.documentElement.style.setProperty('--menu-bg', color === '#000000' ? '#333' : '#fff');
         },
       },
     });
