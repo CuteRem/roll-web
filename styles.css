@@ -76,3 +76,10 @@ section {
     --text-color: #330066;
     --header-bg: #9933ff;
 }
+
+/* 添加一些自定义样式 */
+#true-false-result {
+    font-size: 3em; /* 加大字体 */
+    font-weight: bold;
+    text-align: center; /* 文字居中 */
+}
