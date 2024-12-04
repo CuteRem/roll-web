@@ -80,39 +80,50 @@
 
     <!-- Menu -->
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1" @click="switchTab('randomNumber')">Number Generator</el-menu-item>
-      <el-menu-item index="2" @click="switchTab('trueFalse')">True/False Generator</el-menu-item>
-      <el-menu-item index="3" @click="switchTab('randomOption')">Option Selector</el-menu-item>
+      <el-menu-item index="1" @click="switchTab('randomNumber')">Number</el-menu-item>
+      <el-menu-item index="2" @click="switchTab('trueFalse')">True/False</el-menu-item>
+      <el-menu-item index="3" @click="switchTab('randomOption')">Option</el-menu-item>
     </el-menu>
 
-    <!-- Random Number Section -->
+    <!-- Result Section (Above Inputs) -->
     <div v-if="currentTab === 'randomNumber'" class="section-content">
-      <h2>Number Generator</h2>
+      <h2>Number Result</h2>
+      <transition name="fade">
+        <div v-if="numberResult !== null" class="result">{{ numberResult }}</div>
+      </transition>
+    </div>
+    <div v-if="currentTab === 'trueFalse'" class="section-content">
+      <h2>True/False Result</h2>
+      <transition name="fade">
+        <div v-if="tfResult !== null" class="result">
+          <el-icon v-if="tfResult"><i class="el-icon-check"></i></el-icon>
+          <el-icon v-else><i class="el-icon-close"></i></el-icon>
+        </div>
+      </transition>
+    </div>
+    <div v-if="currentTab === 'randomOption'" class="section-content">
+      <h2>Option Result</h2>
+      <transition name="fade">
+        <div v-if="optionResult !== null" class="selected-option">{{ optionResult }}</div>
+      </transition>
+    </div>
+
+    <!-- Number Generator Section -->
+    <div v-if="currentTab === 'randomNumber'" class="section-content">
       <div style="display: flex; gap: 10px;">
         <el-input-number v-model="min" label="Minimum" :min="0" style="width: 100px;"></el-input-number>
         <el-input-number v-model="max" label="Maximum" :max="100" style="width: 100px;"></el-input-number>
       </div>
       <el-button type="primary" @click="generateNumber">Generate</el-button>
-      <transition name="fade">
-        <div v-if="numberResult !== null" class="result">{{ numberResult }}</div>
-      </transition>
     </div>
 
-    <!-- True/False Section -->
+    <!-- True/False Generator Section -->
     <div v-if="currentTab === 'trueFalse'" class="section-content">
-      <h2>True/False Generator</h2>
       <el-button type="primary" @click="generateTrueFalse">Generate</el-button>
-      <transition name="fade">
-        <div v-if="tfResult !== null" class="result">
-          <el-icon v-if="tfResult"><el-icon-success></el-icon></el-icon>
-          <el-icon v-else><el-icon-close></el-icon></el-icon>
-        </div>
-      </transition>
     </div>
 
     <!-- Option Selector Section -->
     <div v-if="currentTab === 'randomOption'" class="section-content">
-      <h2>Option Selector</h2>
       <div style="display: flex; gap: 10px;">
         <el-input v-model="newOption" placeholder="Enter an option" style="flex: 1;"></el-input>
         <el-button @click="addOption" type="success">Add</el-button>
@@ -124,9 +135,6 @@
       <ul>
         <li v-for="(option, index) in options" :key="index">{{ option }}</li>
       </ul>
-      <transition name="fade">
-        <div v-if="optionResult !== null" class="selected-option">{{ optionResult }}</div>
-      </transition>
     </div>
   </div>
 
