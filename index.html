@@ -10,98 +10,132 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      transition: background-color 0.3s ease; /* 添加过渡效果 */
+      background-color: var(--background-color, #fff);
+      color: var(--text-color, #000);
     }
     #app {
       max-width: 600px;
-      margin: 20px auto; /* 添加上下边距 */
+      margin: 0 auto;
       padding: 20px;
-      text-align: center;
     }
     .header {
-      background-color: #f0f0f0; /* 添加背景色 */
-      padding: 10px 0;
-      margin-bottom: 20px; /* 与下方内容分界 */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 添加阴影 */
+      background-color: var(--header-bg, #f4f4f4);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
     }
     .theme-selector {
       position: fixed;
       top: 10px;
       right: 10px;
-      z-index: 10; /* 确保在最上层 */
     }
-    .result {
-      font-size: 2rem;
+    .section-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .result, .selected-option {
+      font-size: 24px;
       margin-top: 20px;
-      animation: fadeIn 0.5s;
-    }
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.5s;
-    }
-    .fade-enter, .fade-leave-to {
-      opacity: 0;
-    }
-    /* 选项生成结果样式优化 */
-    .option-result {
-      font-size: 2.5rem;
-      margin: 20px 0;
       font-weight: bold;
+    }
+    .selected-option {
+      font-size: 30px;
+    }
+    .el-menu-demo {
+      background-color: var(--menu-bg, #fff);
+      margin-bottom: 20px;
+    }
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      #app {
+        padding: 10px;
+      }
+      .header h1 {
+        font-size: 20px;
+      }
+      .selected-option {
+        font-size: 24px;
+      }
+      .result {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div id="app">
+    <!-- Header Section -->
     <div class="header">
       <h1>Roll Web App</h1>
     </div>
+
+    <!-- Menu -->
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1" @click="switchTab('randomNumber')">数字</el-menu-item>
-      <el-menu-item index="2" @click="switchTab('trueFalse')">真/假</el-menu-item>
-      <el-menu-item index="3" @click="switchTab('randomOption')">选项</el-menu-item>
+      <el-menu-item index="1" @click="switchTab('randomNumber')">Number Generator</el-menu-item>
+      <el-menu-item index="2" @click="switchTab('trueFalse')">True/False Generator</el-menu-item>
+      <el-menu-item index="3" @click="switchTab('randomOption')">Option Selector</el-menu-item>
     </el-menu>
 
-    <div v-if="currentTab === 'randomNumber'">
-      <h2>数字</h2>
-      <el-input-number v-model="min" label="最小值" :min="0"></el-input-number>
-      <el-input-number v-model="max" label="最大值" :max="100"></el-input-number>
-      <el-button type="primary" @click="generateNumber">生成</el-button>
+    <!-- Random Number Section -->
+    <div v-if="currentTab === 'randomNumber'" class="section-content">
+      <h2>Number Generator</h2>
+      <div style="display: flex; gap: 10px;">
+        <el-input-number v-model="min" label="Minimum" :min="0" style="width: 100px;"></el-input-number>
+        <el-input-number v-model="max" label="Maximum" :max="100" style="width: 100px;"></el-input-number>
+      </div>
+      <el-button type="primary" @click="generateNumber">Generate</el-button>
       <transition name="fade">
         <div v-if="numberResult !== null" class="result">{{ numberResult }}</div>
       </transition>
     </div>
 
-    <div v-if="currentTab === 'trueFalse'">
-      <h2>真/假</h2>
-      <el-button type="primary" @click="generateTrueFalse">生成</el-button>
+    <!-- True/False Section -->
+    <div v-if="currentTab === 'trueFalse'" class="section-content">
+      <h2>True/False Generator</h2>
+      <el-button type="primary" @click="generateTrueFalse">Generate</el-button>
       <transition name="fade">
-        <div v-if="tfResult !== null" style="margin-top: 20px;">
-          <el-icon v-if="tfResult" size="large" color="#67C23A"><el-icon-success /></el-icon>
-          <el-icon v-else size="large" color="#F56C6C"><el-icon-close /></el-icon>
+        <div v-if="tfResult !== null" class="result">
+          <el-icon v-if="tfResult"><el-icon-success></el-icon></el-icon>
+          <el-icon v-else><el-icon-close></el-icon></el-icon>
         </div>
       </transition>
     </div>
 
-    <div v-if="currentTab === 'randomOption'">
-      <h2>选项</h2>
-      <transition name="fade">
-        <div v-if="optionResult !== null" class="option-result">{{ optionResult }}</div>
-      </transition>
-      <el-input v-model="newOption" placeholder="输入一个选项"></el-input>
-      <el-button @click="addOption" type="success">添加</el-button>
-      <el-button @click="clearOptions" type="danger">清除</el-button>
-      <ul style="list-style: none; padding: 0; margin-top: 20px;">
-        <li v-for="(option, index) in options" :key="index" style="margin-bottom: 5px;">{{ option }}</li>
+    <!-- Option Selector Section -->
+    <div v-if="currentTab === 'randomOption'" class="section-content">
+      <h2>Option Selector</h2>
+      <div style="display: flex; gap: 10px;">
+        <el-input v-model="newOption" placeholder="Enter an option" style="flex: 1;"></el-input>
+        <el-button @click="addOption" type="success">Add</el-button>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <el-button @click="clearOptions" type="danger">Clear</el-button>
+        <el-button type="primary" @click="generateOption">Generate</el-button>
+      </div>
+      <ul>
+        <li v-for="(option, index) in options" :key="index">{{ option }}</li>
       </ul>
-      <el-button type="primary" @click="generateOption" style="margin-top: 20px;">选择</el-button>
+      <transition name="fade">
+        <div v-if="optionResult !== null" class="selected-option">{{ optionResult }}</div>
+      </transition>
     </div>
   </div>
 
+  <!-- Theme Selector -->
   <div class="theme-selector">
     <el-dropdown>
-      <el-button type="primary" icon="el-icon-arrow-down">主题</el-button>
+      <el-button type="primary" icon="el-icon-arrow-down">Theme</el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="theme in themes" :key="theme.name" @click="changeTheme(theme.color)">
+        <el-dropdown-item v-for="theme in themes" :key="theme.name" @click.native="changeTheme(theme.color)">
           {{ theme.name }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -123,23 +157,20 @@
           newOption: '',
           optionResult: null,
           themes: [
-            { name: '默认', color: '#FFFFFF' },
-            { name: '粉色', color: '#FFC0CB' },
-            { name: '红色', color: '#FF0000' },
-            { name: '黄色', color: '#FFFF00' },
-            { name: '黑色', color: '#000000' },
-            { name: '蓝色', color: '#0000FF' },
-            { name: '绿色', color: '#008000' },
-            { name: '紫色', color: '#800080' },
+            { name: 'Default', color: '#FFFFFF' },
+            { name: 'Pink', color: '#FFC0CB' },
+            { name: 'Red', color: '#FF0000' },
+            { name: 'Yellow', color: '#FFFF00' },
+            { name: 'Black', color: '#000000' },
+            { name: 'Blue', color: '#0000FF' },
+            { name: 'Green', color: '#008000' },
+            { name: 'Purple', color: '#800080' },
           ],
         };
       },
       methods: {
         switchTab(tab) {
           this.currentTab = tab;
-          this.numberResult = null;
-          this.tfResult = null;
-          this.optionResult = null;
         },
         generateNumber() {
           this.numberResult = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
@@ -164,6 +195,8 @@
         },
         changeTheme(color) {
           document.body.style.backgroundColor = color;
+          document.documentElement.style.setProperty('--background-color', color);
+          document.documentElement.style.setProperty('--header-bg', color === '#000000' ? '#333' : '#f4f4f4');
         },
       },
     });
