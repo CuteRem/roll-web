@@ -35,6 +35,14 @@
       top: 10px;
       right: 10px;
     }
+    .el-menu-demo {
+      background-color: var(--menu-bg, #fff);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .el-menu-demo .el-menu-item {
+      font-size: 16px;
+    }
     .section-content {
       display: flex;
       flex-direction: column;
@@ -49,10 +57,6 @@
     }
     .selected-option {
       font-size: 30px;
-    }
-    .el-menu-demo {
-      background-color: var(--menu-bg, #fff);
-      margin-bottom: 20px;
     }
     /* 响应式调整 */
     @media (max-width: 600px) {
@@ -79,10 +83,10 @@
     </div>
 
     <!-- Menu -->
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1" @click="switchTab('randomNumber')">Number</el-menu-item>
-      <el-menu-item index="2" @click="switchTab('trueFalse')">True/False</el-menu-item>
-      <el-menu-item index="3" @click="switchTab('randomOption')">Option</el-menu-item>
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchTab">
+      <el-menu-item index="1">Number</el-menu-item>
+      <el-menu-item index="2">True/False</el-menu-item>
+      <el-menu-item index="3">Option</el-menu-item>
     </el-menu>
 
     <!-- Result Section (Above Inputs) -->
@@ -96,8 +100,8 @@
       <h2>True/False Result</h2>
       <transition name="fade">
         <div v-if="tfResult !== null" class="result">
-          <el-icon v-if="tfResult"><i class="el-icon-check"></i></el-icon>
-          <el-icon v-else><i class="el-icon-close"></i></el-icon>
+          <div v-if="tfResult">✅ True</div>
+          <div v-else>❌ False</div>
         </div>
       </transition>
     </div>
@@ -177,8 +181,10 @@
         };
       },
       methods: {
-        switchTab(tab) {
-          this.currentTab = tab;
+        switchTab(index) {
+          if (index === '1') this.currentTab = 'randomNumber';
+          else if (index === '2') this.currentTab = 'trueFalse';
+          else if (index === '3') this.currentTab = 'randomOption';
         },
         generateNumber() {
           this.numberResult = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
