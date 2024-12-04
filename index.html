@@ -1,60 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roll Web App</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Roll - 随机选择器</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Roll Web App</h1>
-        <div id="theme-selector">
-            <label for="theme">Choose Theme:</label>
-            <select id="theme" onchange="changeTheme()">
-                <option value="default">White</option>
-                <option value="pink">Pink</option>
-                <option value="red">Red</option>
-                <option value="yellow">Yellow</option>
-                <option value="black">Black</option>
-                <option value="blue">Blue</option>
-                <option value="green">Green</option>
-                <option value="purple">Purple</option>
-            </select>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Roll</h1>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="number-tab" data-toggle="tab" href="#number" role="tab" aria-controls="number" aria-selected="true">数字</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="true-false-tab" data-toggle="tab" href="#true-false" role="tab" aria-controls="true-false" aria-selected="false">真/假</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="custom-tab" data-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">自定义</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="number" role="tabpanel" aria-labelledby="number-tab">
+                <div class="form-group">
+                    <label for="number-count">数量:</label>
+                    <input type="number" class="form-control" id="number-count" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="number-min">最小值:</label>
+                    <input type="number" class="form-control" id="number-min" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="number-max">最大值:</label>
+                    <input type="number" class="form-control" id="number-max" value="100">
+                </div>
+                <button class="btn btn-primary" onclick="rollNumber()">Roll!</button>
+                <div id="number-result" class="mt-3"></div>
+            </div>
+
+            <div class="tab-pane fade" id="true-false" role="tabpanel" aria-labelledby="true-false-tab">
+                <button class="btn btn-primary" onclick="rollTrueFalse()">Roll!</button>
+                <div id="true-false-result" class="mt-3 display-4"></div> <div id="true-false" role="tabpanel" aria-labelledby="true-false-tab">
+                <button class="btn btn-primary" onclick="rollTrueFalse()">Roll!</button>
+                <div id="true-false-result" class="mt-3 display-4 animate__animated" ></div>
+            </div>
+
+
+            <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
+                <div class="form-group">
+                    <label for="custom-option">选项:</label>
+                    <input type="text" class="form-control" id="custom-option">
+                </div>
+                <button class="btn btn-secondary mb-3" onclick="addOption()">添加选项</button>
+                <ul id="custom-options-list" class="list-group mb-3"></ul>
+
+                <div class="form-group">
+                    <label for="custom-count">数量:</label>
+                    <input type="number" class="form-control" id="custom-count" value="1" min="1">
+                </div>
+                <button class="btn btn-primary" onclick="rollCustom()">Roll!</button>
+                <div id="custom-result" class="mt-3"></div>
+            </div>
         </div>
-    </header>
-    <main>
-        <!-- Random number generator -->
-        <section id="random-number-section">
-            <h2>Number Generator</h2>
-            <label>Enter range:</label>
-            <input type="number" id="min" placeholder="Min" />
-            <input type="number" id="max" placeholder="Max" />
-            <button onclick="generateNumber()">Generate</button>
-            <p id="number-result">Result: </p>
-        </section>
+    </div>
 
-        <!-- True/False generator -->
-        <section id="true-false-section">
-            <h2>True or False Generator</h2>
-            <button onclick="generateTrueFalse()">Generate True/False</button>
-            <p id="true-false-result">Result: </p>
-        </section>
-
-        <!-- Option selector -->
-        <section id="option-selector-section">
-            <h2>Option Selector</h2>
-            <div id="options-container"></div>
-            <input type="text" id="option-input" placeholder="Enter option" />
-            <button onclick="addOption()">Add Option</button>
-            <button onclick="clearOptions()">Clear Options</button>
-            <button onclick="selectRandomOption()">Select Random</button>
-            <p id="option-result">Result: </p>
-        </section>
-    </main>
-    <footer>
-        <p>© 2024 Roll Web App. Designed with care.</p>
-    </footer>
-    <script src="scripts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- 引入 Animate.css 库 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="script.js"></script>
 </body>
 </html>
