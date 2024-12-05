@@ -121,7 +121,7 @@
   </div>
   <el-row :gutter="20" style="margin-bottom: 20px;">
     <el-col :span="8" v-for="(option, index) in options" :key="index" style="margin-bottom: 20px;">
-      <el-card shadow="hover" style="width: 100%; max-width: 200px; margin: 0 auto;">
+      <el-card shadow="hover" style="width: 100%; min-width: 100px; max-width: 200px; margin: 0 auto;">
         <div>{{ option }}</div>
       </el-card>
     </el-col>
