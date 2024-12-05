@@ -121,7 +121,7 @@
     <el-button type="primary" @click="generateOption">Generate</el-button>
   </div>
   <el-row :gutter="20" style="margin-bottom: 20px;">
-    <el-col :span="8" v-for="(option, index) in options" :key="index">
+    <el-col :span="24" v-for="(option, index) in options" :key="index">
       <el-card shadow="hover" style="width: 100%;">
         <div>{{ option }}</div>
       </el-card>
@@ -129,6 +129,7 @@
   </el-row>
 </div>
 
+    
   <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
   <script>
