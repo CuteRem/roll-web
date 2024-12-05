@@ -93,8 +93,8 @@
     <div v-if="currentTab === 'trueFalse'" class="section-content">
       <transition name="fade">
         <div v-if="tfResult !== null" class="result">
-          <div v-if="tfResult">✅ True</div>
-          <div v-else>❌ False</div>
+          <div v-if="tfResult">✅</div>
+          <div v-else>❌</div>
         </div>
       </transition>
     </div>
@@ -128,7 +128,7 @@
         <el-button @click="clearOptions" type="danger">Clear</el-button>
         <el-button type="primary" @click="generateOption">Generate</el-button>
       </div>
-      <ul style="display: flex; gap: 10px; margin-top: 10px;>
+      <ul>
         <li v-for="(option, index) in options" :key="index">{{ option }}</li>
       </ul>
     </div>
