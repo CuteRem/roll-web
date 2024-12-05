@@ -33,10 +33,16 @@
     .el-menu-demo {
       background-color: #fff;
       margin-bottom: 20px;
-      text-align: center;
+      display: flex;
+      justify-content: space-evenly;
+      padding: 0;
     }
     .el-menu-demo .el-menu-item {
       font-size: 16px;
+      flex-grow: 1; /* 让菜单项充满父元素 */
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
     }
     .section-content {
       display: flex;
