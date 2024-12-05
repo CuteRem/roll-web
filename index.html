@@ -33,17 +33,10 @@
     .el-menu-demo {
       background-color: #fff;
       margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between; /* 平铺所有菜单项 */
-      padding: 0;
-      width: 100%;
+      text-align: center;
     }
     .el-menu-demo .el-menu-item {
       font-size: 16px;
-      flex-grow: 1; /* 让每个菜单项都均匀分布 */
-      text-align: center;
-      padding: 10px;
-      box-sizing: border-box;
     }
     .section-content {
       display: flex;
@@ -81,7 +74,7 @@
   <div id="app">
     <!-- Header Section -->
     <div class="header">
-      <h1>Roll Web App</h1>
+      <h1>Roll</h1>
     </div>
 
     <!-- Menu -->
@@ -93,13 +86,11 @@
 
     <!-- Result Section (Above Inputs) -->
     <div v-if="currentTab === 'randomNumber'" class="section-content">
-      <h2>Number Result</h2>
       <transition name="fade">
         <div v-if="numberResult !== null" class="result">{{ numberResult }}</div>
       </transition>
     </div>
     <div v-if="currentTab === 'trueFalse'" class="section-content">
-      <h2>True/False Result</h2>
       <transition name="fade">
         <div v-if="tfResult !== null" class="result">
           <div v-if="tfResult">✅ True</div>
@@ -108,7 +99,6 @@
       </transition>
     </div>
     <div v-if="currentTab === 'randomOption'" class="section-content">
-      <h2>Option Result</h2>
       <transition name="fade">
         <div v-if="optionResult !== null" class="selected-option">{{ optionResult }}</div>
       </transition>
@@ -138,7 +128,7 @@
         <el-button @click="clearOptions" type="danger">Clear</el-button>
         <el-button type="primary" @click="generateOption">Generate</el-button>
       </div>
-      <ul>
+      <ul style="display: flex; gap: 10px; margin-top: 10px;>
         <li v-for="(option, index) in options" :key="index">{{ option }}</li>
       </ul>
     </div>
