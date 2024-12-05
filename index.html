@@ -63,17 +63,19 @@
       padding: 0;
       margin: 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 15px;
+      width: 100%;
     }
     li {
       background-color: #f0f0f0;
       padding: 10px;
       border-radius: 8px;
-      width: 80%;
+      width: 45%; /* This makes the options display side by side */
       text-align: center;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
     }
     /* Input and button spacing */
     .input-container {
@@ -101,6 +103,9 @@
       .result {
         font-size: 20px;
       }
+      ul {
+        flex-direction: column; /* Stack the options vertically on small screens */
+      }
     }
   </style>
 </head>
@@ -112,11 +117,11 @@
     </div>
 
     <!-- Menu -->
-    <div class="el-menu-demo">
-      <el-button type="primary" @click="switchTab('randomNumber')">Number</el-button>
-      <el-button type="primary" @click="switchTab('trueFalse')">True/False</el-button>
-      <el-button type="primary" @click="switchTab('randomOption')">Option</el-button>
-    </div>
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchTab">
+      <el-menu-item index="1">Number</el-menu-item>
+      <el-menu-item index="2">True/False</el-menu-item>
+      <el-menu-item index="3">Option</el-menu-item>
+    </el-menu>
 
     <!-- Result Section (Above Inputs) -->
     <div v-if="currentTab === 'randomNumber'" class="section-content">
@@ -163,13 +168,19 @@
         <el-input v-model="newOption" placeholder="Enter an option" style="flex: 1;"></el-input>
         <el-button @click="addOption" type="success">Add</el-button>
       </div>
+
+      <!-- Options Display Area -->
       <div class="button-container">
         <el-button @click="clearOptions" type="danger">Clear</el-button>
         <el-button type="primary" @click="generateOption">Generate</el-button>
       </div>
-      <ul>
-        <li v-for="(option, index) in options" :key="index">{{ option }}</li>
-      </ul>
+
+      <!-- Displaying added options in a more compact and spacious area -->
+      <div class="options-display">
+        <ul>
+          <li v-for="(option, index) in options" :key="index">{{ option }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 
