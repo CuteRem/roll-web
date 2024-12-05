@@ -34,9 +34,6 @@
       background-color: #fff;
       margin-bottom: 20px;
       text-align: center;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
     }
     .el-menu-demo .el-menu-item {
       font-size: 16px;
@@ -117,10 +114,10 @@
     </div>
 
     <!-- Menu -->
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchTab">
-      <el-menu-item index="1">Number</el-menu-item>
-      <el-menu-item index="2">True/False</el-menu-item>
-      <el-menu-item index="3">Option</el-menu-item>
+    <el-menu v-model="currentTab" class="el-menu-demo" mode="horizontal">
+      <el-menu-item index="randomNumber">Number</el-menu-item>
+      <el-menu-item index="trueFalse">True/False</el-menu-item>
+      <el-menu-item index="randomOption">Option</el-menu-item>
     </el-menu>
 
     <!-- Result Section (Above Inputs) -->
@@ -201,9 +198,6 @@
         };
       },
       methods: {
-        switchTab(tab) {
-          this.currentTab = tab;
-        },
         generateNumber() {
           this.numberResult = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
         },
