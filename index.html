@@ -98,7 +98,7 @@
 
     <!-- Number Generator Section -->
     <div v-if="currentTab === 'randomNumber'" class="section-content">
-      <div style="display: flex; gap: 10px;">
+      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
         <el-input-number v-model="min" label="Minimum" :min="0" style="width: 100px;"></el-input-number>
         <el-input-number v-model="max" label="Maximum" :max="100" style="width: 100px;"></el-input-number>
       </div>
