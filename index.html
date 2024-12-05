@@ -10,8 +10,8 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--background-color, #fff);
-      color: var(--text-color, #000);
+      background-color: #fff;
+      color: #000;
     }
     #app {
       max-width: 600px;
@@ -19,7 +19,7 @@
       padding: 20px;
     }
     .header {
-      background-color: var(--header-bg, #f4f4f4);
+      background-color: #f4f4f4;
       padding: 20px;
       text-align: center;
       margin-bottom: 20px;
@@ -30,13 +30,8 @@
       margin: 0;
       font-size: 24px;
     }
-    .theme-selector {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-    }
     .el-menu-demo {
-      background-color: var(--menu-bg, #fff);
+      background-color: #fff;
       margin-bottom: 20px;
       text-align: center;
     }
@@ -66,7 +61,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
     }
     li {
       background-color: #f0f0f0;
@@ -79,19 +74,15 @@
     /* Input and button spacing */
     .input-container {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       margin-bottom: 20px;
+      width: 100%;
+      justify-content: center;
     }
     .button-container {
       margin-top: 20px;
     }
 
-    /* Theme selector button styling */
-    .el-dropdown .el-button {
-      font-size: 14px;
-      padding: 8px 20px;
-    }
-    
     /* Responsive adjustments */
     @media (max-width: 600px) {
       #app {
@@ -178,18 +169,6 @@
     </div>
   </div>
 
-  <!-- Theme Selector -->
-  <div class="theme-selector">
-    <el-dropdown>
-      <el-button type="primary" icon="el-icon-arrow-down">Theme</el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="theme in themes" :key="theme.name" @click.native="changeTheme(theme.color)">
-          {{ theme.name }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
   <script>
@@ -204,16 +183,6 @@
           options: [],
           newOption: '',
           optionResult: null,
-          themes: [
-            { name: 'Default', color: '#FFFFFF' },
-            { name: 'Pink', color: '#FFC0CB' },
-            { name: 'Red', color: '#FF0000' },
-            { name: 'Yellow', color: '#FFFF00' },
-            { name: 'Black', color: '#000000' },
-            { name: 'Blue', color: '#0000FF' },
-            { name: 'Green', color: '#008000' },
-            { name: 'Purple', color: '#800080' },
-          ],
         };
       },
       methods: {
@@ -242,12 +211,6 @@
             const randomIndex = Math.floor(Math.random() * this.options.length);
             this.optionResult = this.options[randomIndex];
           }
-        },
-        changeTheme(color) {
-          document.documentElement.style.setProperty('--background-color', color);
-          document.documentElement.style.setProperty('--header-bg', color === '#000000' ? '#333' : '#f4f4f4');
-          document.documentElement.style.setProperty('--text-color', color === '#000000' ? '#fff' : '#000');
-          document.documentElement.style.setProperty('--menu-bg', color === '#000000' ? '#333' : '#fff');
         },
       },
     });
